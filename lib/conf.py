@@ -1,7 +1,9 @@
 from time import strptime, strftime
 
 class Talk(object):
-	"""docstring for Talk"""
+	"""
+	Class modelling a Talk.
+	"""
 	def __init__(self, title="Generic Talk", duration=60, starts_at=None):
 		super(Talk, self).__init__()
 		self.title = title
@@ -10,7 +12,9 @@ class Talk(object):
 
 
 class Track(object):
-	"""docstring for Track"""
+	"""
+	Class modelling a Track (Collection of talks and breaks)
+	"""
 	def __init__(self, name, starts_at=None, ends_at=None, lunch_at=None, networking_at=None):
 		super(Track, self).__init__()
 		self.name = name
@@ -24,6 +28,10 @@ class Track(object):
 		self.talks.append(talk)
 
 	def schedule(self, start, end, talks):
+		"""
+		Schedules some talks for the duration between start and end, and returns the list 
+		of still unscheduled talks.
+		"""
 		start_min = start.tm_hour * 60 + start.tm_min
 		end_min = end.tm_hour * 60 + end.tm_min
 		length = end_min - start_min
@@ -37,7 +45,9 @@ class Track(object):
 
 
 class Conference(object):
-	"""docstring for Conference"""
+	"""
+	Class to model Conference. Collection of tracks. The biggest entity in the given limited universe of discourse.
+	"""
 	def __init__(self, name="Generic Conference", file=None, starts_at=None, ends_at=None, lunch_at=None, networking_at=None):
 		super(Conference, self).__init__()
 		self.name = name
@@ -51,6 +61,9 @@ class Conference(object):
 			self.parse_file(file)
 
 	def parse_file(self, file):
+		"""
+		Parses a file for input data and stores the parsed talks in unassigned_talks
+		"""
 		inp = open(file, 'r')
 		line = inp.readline()
 		while line:
@@ -67,6 +80,9 @@ class Conference(object):
 		self.tracks.append(Track(name, starts_at=self.starts_at, ends_at=self.ends_at, lunch_at=self.lunch_at, networking_at=self.networking_at))
 
 	def list_tracks(self):
+		"""
+		Prints information about the tracks
+		"""
 		for track in self.tracks:
 			print track.name + ":"
 			for talk in track.talks:
