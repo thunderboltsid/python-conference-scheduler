@@ -28,13 +28,12 @@ class Track(object):
 		end_min = end.tm_hour * 60 + end.tm_min
 		length = end_min - start_min
 		current_length = 0
-		for index, talk in enumerate(talks):
+		for talk in talks:
 			if current_length < length and current_length + talk.duration <= length:
 				talk.starts_at = strptime(str(start.tm_hour + current_length / 60) + ":" + str(current_length%60), "%H:%M")
 				self.talks.append(talk)
-				talks.pop(index)
 				current_length += talk.duration
-		return talks
+		return [talk for talk in talks if talk not in self.talks]
 
 
 class Conference(object):
@@ -82,4 +81,6 @@ class Conference(object):
 			track.add_talk(Talk(title="Lunch", starts_at=self.lunch_at))
 			self.unassigned_talks = track.schedule(strptime(str(self.lunch_at.tm_hour + 1) + ":" + str(self.lunch_at.tm_min), "%H:%M"), self.ends_at, self.unassigned_talks)
 			track.add_talk(Talk(title="Netowrking Event", starts_at=self.networking_at))
+		for talk in self.unassigned_talks:
+			print "Unable to schedule: "+talk.title
 
